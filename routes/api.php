@@ -11,6 +11,9 @@ Route::prefix('auth')->group(function () {
     Route::post('/login', [\App\Http\Controllers\AuthController::class, 'login']);
 });
 
+// callback
+Route::get('/tripay/callback', [\App\Http\Controllers\PaymentController::class, 'tripayCallback']);
+
 Route::middleware(\App\Http\Middleware\JwtRequest::class)->group(function () {
     // profile
     Route::prefix('profile')->group(function () {
@@ -22,7 +25,6 @@ Route::middleware(\App\Http\Middleware\JwtRequest::class)->group(function () {
     Route::prefix('payment')->group(function () {
         Route::get('/get', [\App\Http\Controllers\PaymentController::class, 'getPayments']);
         Route::post('/tripay', [\App\Http\Controllers\PaymentController::class, 'tripay']);
-        Route::get('/tripay/callback', [\App\Http\Controllers\PaymentController::class, 'tripayCallback']);
     });
 
     // fillme app

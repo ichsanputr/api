@@ -115,7 +115,7 @@ class PaymentController extends Controller
             ]);
         }
 
-        $data = json_decode($json);
+        $data = (array) json_decode($json);
 
         $reference = $data["reference"];
         $status = $data["status"];
