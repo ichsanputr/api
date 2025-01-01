@@ -15,11 +15,11 @@ return [
     |
     */
 
-    'paths' => ['api/*'],
+    'paths' => ['api/*', 'sanctum/csrf-cookie'],
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['http://127.0.0.1:3300', '.catsentence.com'],
+    'allowed_origins' => ['*'],
 
     'allowed_origins_patterns' => [],
 

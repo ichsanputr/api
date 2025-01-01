@@ -7,7 +7,7 @@ use Illuminate\Support\Str;
 
 class User extends Model
 {
-    protected $fillable = ['uuid', 'username', 'password', 'pic_url', 'email'];
+    protected $fillable = ['uuid', 'name', 'password', 'pic_url', 'email', 'active_until'];
 
     protected static function boot()
     {

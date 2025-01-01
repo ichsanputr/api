@@ -21,20 +21,19 @@ class JwtRequest
         try {
             JWT::$leeway = 15;
 
-            $secret_key = base64_decode(env('JWT_SECRET'));
-            $decoded = JWT::decode($jwt, new Key($secret_key, 'HS512'));
+            $decoded = JWT::decode($jwt, new Key(env('JWT_SECRET'), 'HS256'));
             $token = json_decode(json_encode($decoded), true);
 
-            $user = \App\Models\User::where('uuid', $token['']['account_id'])->first();
+            $user = \App\Models\User::where('uuid', $token['account_id'])->first();
 
-            $request->attributes->set('accountDetail', ['workspaceid' => 'halo']);
+            $request->attributes->set('accountDetail', $user);
 
             if ($user)
                 return $next($request);
             else
                 return response()->json(['message' => 'Unauthorized'], 401);
         } catch (\Exception $e) {
-            return response()->json(['message' => 'Unauthorized'], 401);
+            return response()->json(['message' => $e->getMessage()], 401);
         }
     }
 }
