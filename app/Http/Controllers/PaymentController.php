@@ -100,7 +100,7 @@ class PaymentController extends Controller
 
         // log request callback tripay
         Log::info('Receive tripay callback: ' . $json);
-        
+
         if ($signature !== (string) $callbackSignature) {
             return response()->json([
                 'success' => false,
@@ -121,16 +121,19 @@ class PaymentController extends Controller
         $status = $data["status"];
 
         if ($status == 'PAID') {
-            $user = \App\Models\Payment::where('reference', $reference)->pluck('user_id', 'day');
+            // get payment data
+            $user = \App\Models\Payment::where('reference', $reference)->select('user_id', 'day')->first();
 
-            \App\Models\Payment::where('uuid', $user->user_id)
+            \App\Models\User::where('uuid', $user->user_id)
                 ->update([
-                    'active_until' => DB::raw("DATE_ADD(active_until, INTERVAL ? DAY)", [$user->day])
+                    'active_until' => DB::raw("DATE_ADD(IFNULL(active_until, CURDATE()), INTERVAL {$user->day} DAY)"),
                 ]);
         }
 
+        \App\Models\Payment::where('reference', $reference)->update(['status' => $status]);
+
         return response()->json([
-            'message' => 'Success',
+            'success' => true,
         ]);
     }
 }
