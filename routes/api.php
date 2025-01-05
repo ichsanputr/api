@@ -30,5 +30,6 @@ Route::middleware(\App\Http\Middleware\JwtRequest::class)->group(function () {
     // fillme app
     Route::prefix('fillme')->group(function () {
         Route::get('/sentences', [\App\Http\Controllers\FillmeController::class, 'getSentences']);
+        Route::post('/sentences', [\App\Http\Controllers\FillmeController::class, 'addSentences']);
     });
 });

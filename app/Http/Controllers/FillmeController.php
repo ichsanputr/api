@@ -13,7 +13,7 @@ class FillmeController extends Controller
         $limit = $request->query('limit');
 
         if ((int) $limit > 1) {
-            $results = \App\Models\FillmeSentences::select('fillme_sentences.*', 'users.username')
+            $results = \App\Models\FillmeSentences::select('fillme_sentences.*', 'users.name')
                 ->leftJoin('users', 'users.uuid', '=', 'fillme_sentences.user_id')
                 ->where('length', '=', $length)
                 ->where('category', '=', $category)
@@ -26,7 +26,7 @@ class FillmeController extends Controller
                 'data' => $results
             ]);
         } else {
-            $result = \App\Models\FillmeSentences::select('fillme_sentences.*', 'users.username')
+            $result = \App\Models\FillmeSentences::select('fillme_sentences.*', 'users.name')
                 ->leftJoin('users', 'users.uuid', '=', 'fillme_sentences.user_id')
                 ->where('length', '=', $length)
                 ->where('category', '=', $category)
@@ -39,5 +39,21 @@ class FillmeController extends Controller
                 'data' => $result
             ]);
         }
+    }
+
+    public function addSentences(Request $request)
+    {
+        $results = \App\Models\FillmeSentences::create([
+            'sentence' => $request->input('sentence'),
+            'fill' => $request->input('fill'),
+            'length' => $request->input('lengthCategory'),
+            'category' => $request->input('kindCategory'),
+            'user_id' => $request->attributes->get('accountDetail')['uuid'],
+        ]);
+
+        return response()->json([
+            'message' => 'Success',
+            'data' => $results
+        ]);
     }
 }
