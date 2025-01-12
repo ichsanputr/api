@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use Carbon\Carbon;
 use Closure;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
@@ -10,10 +11,25 @@ class JwtRequest
 {
     public function handle($request, Closure $next)
     {
-        $jwt = null;
-        $authHeader = $request->header('Authorization');
-        if ($authHeader && preg_match('/Bearer\s(\S+)/', $authHeader, $matches))
-            $jwt = $matches[1];
+        if ($request->input('ip') && $request->bearerToken() == 'undefined') {
+            $access = \App\Models\Access::firstOrCreate(
+                ['ip_address' => $request->input('ip')],
+                [$request->input('platform') => Carbon::now()]
+            );
+    
+            if ($request->query('platform') === 'fillme') {
+                $fillmeDate = Carbon::parse($access->fillme);
+                if ($fillmeDate->greaterThanOrEqualTo(Carbon::now()->subDay())) {
+                    return $next($request);
+                } else {
+                    return response()->json(['message' => 'Free trial end time'], 403);
+                }
+            }
+    
+            return $next($request);
+        }
+
+        $jwt = $request->bearerToken();
 
         if (!$jwt)
             return response()->json(['message' => 'Unauthorized'], 401);

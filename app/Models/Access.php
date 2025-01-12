@@ -5,10 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
-class FillmeResults extends Model
+class Access extends Model
 {
-    protected $table = 'fillme_results';
-    protected $fillable = ['uuid', 'sentence_id', 'user_id', 'time'];
+    protected $table = 'access';
+    protected $fillable = ['uuid', 'ip_address', 'fillme'];
+
     protected static function boot()
     {
         parent::boot();

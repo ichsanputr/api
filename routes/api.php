@@ -14,6 +14,11 @@ Route::prefix('auth')->group(function () {
 // callback
 Route::get('/tripay/callback', [\App\Http\Controllers\PaymentController::class, 'tripayCallback']);
 
+// leaderboard
+Route::prefix('fillme')->group(function () {
+    Route::get('/leaderboard', [\App\Http\Controllers\FillmeController::class, 'getLeaderboard']);
+});
+
 Route::middleware(\App\Http\Middleware\JwtRequest::class)->group(function () {
     // profile
     Route::prefix('profile')->group(function () {
@@ -31,5 +36,7 @@ Route::middleware(\App\Http\Middleware\JwtRequest::class)->group(function () {
     Route::prefix('fillme')->group(function () {
         Route::get('/sentences', [\App\Http\Controllers\FillmeController::class, 'getSentences']);
         Route::post('/sentences', [\App\Http\Controllers\FillmeController::class, 'addSentences']);
+        Route::post('/result', [\App\Http\Controllers\FillmeController::class, 'addResult']);
+        Route::post('/report', [\App\Http\Controllers\FillmeController::class, 'addReport']);
     });
 });

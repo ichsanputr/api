@@ -9,7 +9,7 @@ class FillmeSentences extends Model
 {
     protected $table = 'fillme_sentences';
 
-    protected $fillable = ['uuid', 'sentence', 'fill', 'length', 'category', 'user_id'];
+    protected $fillable = ['uuid', 'sentence', 'fill', 'length', 'reported', 'category', 'languange', 'user_id'];
 
     protected static function boot()
     {
