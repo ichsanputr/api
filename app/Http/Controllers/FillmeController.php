@@ -12,9 +12,11 @@ class FillmeController extends Controller
         $length = $request->query('length');
         $category = $request->query('category');
         $limit = $request->query('limit');
+        $languange = $request->query('languange');
         $userid = $request->attributes->get('accountDetail')['uuid'];
 
         if ((int) $limit > 1) {
+            // get list sentence
             $results = \App\Models\FillmeSentences::select(
                 'fillme_sentences.*',
                 'users.name',
@@ -44,9 +46,11 @@ class FillmeController extends Controller
                 'data' => $results
             ]);
         } else {
+            // get one sentence
             $result = \App\Models\FillmeSentences::select('fillme_sentences.*', 'users.name')
                 ->leftJoin('users', 'users.uuid', '=', 'fillme_sentences.user_id')
-                ->where('length', '=', $length);
+                ->where('length', '=', $length)
+                ->where('languange', '=', $languange);
 
             if ($category != 5) {
                 $result = $result->where('category', '=', $category);
