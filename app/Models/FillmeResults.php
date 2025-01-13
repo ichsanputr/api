@@ -8,7 +8,7 @@ use Illuminate\Support\Str;
 class FillmeResults extends Model
 {
     protected $table = 'fillme_results';
-    protected $fillable = ['uuid', 'sentence_id', 'user_id', 'time'];
+    protected $fillable = ['uuid', 'sentence_id', 'user_id', 'time', 'languange'];
     protected static function boot()
     {
         parent::boot();

@@ -11,23 +11,26 @@ class JwtRequest
 {
     public function handle($request, Closure $next)
     {
-        if ($request->input('ip') && $request->bearerToken() == 'undefined') {
-            $access = \App\Models\Access::firstOrCreate(
-                ['ip_address' => $request->input('ip')],
-                [$request->input('platform') => Carbon::now()]
-            );
-    
-            if ($request->query('platform') === 'fillme') {
-                $fillmeDate = Carbon::parse($access->fillme);
-                if ($fillmeDate->greaterThanOrEqualTo(Carbon::now()->subDay())) {
-                    return $next($request);
-                } else {
-                    return response()->json(['message' => 'Free trial end time'], 403);
-                }
-            }
-    
-            return $next($request);
-        }
+        // if ($request->input('ip') && $request->bearerToken() == 'undefined' && in_array($middlewareIp, $request->path())) {
+        //     $access = \App\Models\Access::firstOrCreate(
+        //         ['ip_address' => $request->input('ip')],
+        //         [$request->input('platform') => Carbon::now()]
+        //     );
+
+        //     if ($request->query('platform') === 'fillme') {
+        //         $fillmeDate = Carbon::parse($access->fillme);
+        //         if ($fillmeDate->greaterThanOrEqualTo(Carbon::now()->subDay())) {
+        //             return $next($request);
+        //         } else {
+        //             return response()->json(['message' => 'Free trial end time'], 403);
+        //         }
+        //     }
+
+        //     return $next($request);
+        // }
+
+        $middlewareIp = ['addSentence'];
+        if (in_array($request->route()->getName(), $middlewareIp)) return $next($request);
 
         $jwt = $request->bearerToken();
 

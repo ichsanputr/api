@@ -13,9 +13,10 @@ class FillmeController extends Controller
         $category = $request->query('category');
         $limit = $request->query('limit');
         $languange = $request->query('languange');
-        $userid = $request->attributes->get('accountDetail')['uuid'];
 
         if ((int) $limit > 1) {
+            $userid = $request->attributes->get('accountDetail')['uuid'];
+
             // get list sentence
             $results = \App\Models\FillmeSentences::select(
                 'fillme_sentences.*',
@@ -93,7 +94,8 @@ class FillmeController extends Controller
             [
                 'sentence_id' => $request->input('sentence_id'),
                 'time' => $request->input('time'),
-                'user_id' => $user_id
+                'user_id' => $user_id,
+                'languange' => $request->input('languange'),
             ]
         );
 
